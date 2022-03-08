@@ -1,6 +1,20 @@
-import Penalty
+import FileIO
+import Permutations
 
+
+main :: IO ()
 main = do
-    let content = Constraint [0,1,-1] [[False,False,True],[True,False,False],[False,True,False]] [[False,False,True],[True,False,False],[False,False,False]] [[1,0,0],[0,0,1],[0,1,0]] [[0,0,1],[1,0,0],[0,1,0]]
-    print(penalty ([0,2,1], content, 0))
-    -- A, C, B
+    content <- inputFileIO
+    -- print content
+    -- print (findFPAindex content)
+    let partialAsgn = sliceList (findFPAindex content) (findFMindex content) content
+        forbiddenMa = sliceList (findFMindex content) (find2NTindex content) content
+        toonearTasks = sliceList (find2NTindex content) (findMPindex content) content
+        machinePens = sliceList (findMPindex content) (find2NPindex content) content
+        toonearPens = sliceList (find2NPindex content) (length content) content
+    
+    print partialAsgn
+    print forbiddenMa
+    print toonearTasks
+    print machinePens
+    print toonearPens
