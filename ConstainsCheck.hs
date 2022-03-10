@@ -1,6 +1,6 @@
---检查8行8列
---数字大于等于0
---是不是数字
+--check 8 lines, 8 columns 
+--check number greater than 0
+--check it is a number instead of other things
 --Error while parsing input file
 formatCheck2 :: String -> Bool
 formatCheck2 [] = False
