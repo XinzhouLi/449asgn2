@@ -4,8 +4,10 @@
 module FileIO(
     inputFileIO,
     outputFileIO,
-    removeEmpty,
+    deletEmp,
+    ifBoolean,
     sliceList,
+    findNameindex,
     find2NPindex,
     find2NTindex,
     findFMindex,
@@ -31,7 +33,7 @@ inputFileIO = do
     args <- getArgs
     -- normal file IO - read file and store in contents
     contents <- readFile (head args)
-    return (drop 2 (removeEmpty(map rstrip(lines contents))))
+    return (deletEmp(map rstrip(lines contents)))
 
 
 
@@ -40,14 +42,21 @@ outputFileIO message = do
     args <- getArgs
     writeFile (last args) message
 
-removeEmpty :: [String] -> [String]
-removeEmpty [] = []
-removeEmpty (x:xs)
-    | x == "" = removeEmpty xs
-    | otherwise = x:removeEmpty xs
+deletEmp :: [String] -> [String]
+deletEmp [] = []
+deletEmp (x:xs)
+    | x == "" = deletEmp xs
+    | otherwise = x:deletEmp xs
+
+ifBoolean :: [Bool] -> Bool
+ifBoolean [] = True
+ifBoolean xs = and xs
 
 sliceList :: Int -> Int -> [a] -> [a]
 sliceList front end list = drop (front + 1) (take (end) list)
+
+findNameindex :: [[Char]] -> Int 
+findNameindex list = head (findIndices (=="Name:") list)
 
 findFPAindex :: [[Char]] -> Int
 findFPAindex list = head (findIndices (=="forced partial assignment:") list)
