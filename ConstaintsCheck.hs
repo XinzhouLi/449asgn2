@@ -1,4 +1,4 @@
-module ConstainsCheck(
+module ConstaintsCheck(
     checkName,
     checkFormat,
     checkTooNearP,
@@ -50,11 +50,35 @@ numCheck x
 --Output Errors
 errorPrint :: Int -> String
 errorPrint warning
-    | warning == 0 = "Name Error"
-    | warning == 1 = "partial assignment error"
-    | warning == 2 = "invalid machine/task"
-    | warning == 3 = "machine penalty error"
-    | warning == 4 = "invalid task"
-    | warning == 5 = "invalid penalty"
-    | warning == 6 = "Error while parsing input file"
+    | warning == 0 = error "Name Error"
+    | warning == 1 = error "partial assignment error"
+    | warning == 2 = error "invalid machine/task"
+    | warning == 3 = error "machine penalty error"
+    | warning == 4 = error "invalid task"
+    | warning == 5 = error "invalid penalty"
+    | warning == 6 = error "Error while parsing input file"
     | otherwise = ""
+
+--convert letter to integer
+convLetToInt :: Char -> Int
+convLetToInt 'A' = 0
+convLetToInt 'B' = 1
+convLetToInt 'C' = 2
+convLetToInt 'D' = 3
+convLetToInt 'E' = 4
+convLetToInt 'F' = 5
+convLetToInt 'G' = 6
+convLetToInt 'H' = 7
+convLetToInt x = -1
+
+--convert number to integer
+convNumToInt :: Char -> Int
+convNumToInt '1' = 0
+convNumToInt '2' = 1
+convNumToInt '3' = 2
+convNumToInt '4' = 3
+convNumToInt '5' = 4
+convNumToInt '6' = 5
+convNumToInt '7' = 6
+convNumToInt '8' = 7
+convNumToInt x = -1

@@ -2,6 +2,8 @@ import FileIO
 import Permutations
 import Algorithm
 import Penalty
+import ConstaintsCheck
+
 main :: IO ()
 main = do
     content <- inputFileIO
