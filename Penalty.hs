@@ -23,6 +23,6 @@ penalty ([], _, _) = 0
 penalty ([x], content, mach) = getMachPenalty content!!mach!!x
 penalty (x:xs, content, mach)
     -- add too near penalties of position 0 and 1, and position 7 and 0 when the first time run the function  
-    | length xs == 2 = getMachPenalty content!!mach!!x + getNearPenalty content!!x!!head xs + getNearPenalty content!!last xs!!x + penalty (xs, content, mach+1)
+    | length xs == 2 = getMachPenalty content!!mach!!x + getNearPenalty content!!mach!!head xs + getNearPenalty content!!last xs!!x + penalty (xs, content, mach+1)
     -- add too near penalty of current position and next position 
     | otherwise      = getMachPenalty content!!mach!!x + getNearPenalty content!!x!!head xs + penalty (xs, content, mach+1)
