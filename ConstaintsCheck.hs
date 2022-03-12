@@ -9,6 +9,8 @@ module ConstaintsCheck(
 )where
 
 import FileIO
+import Distribution.Simple.Utils (xargs)
+import System.Posix (SystemID(machine))
 
 --Name
 checkName :: String -> Bool
@@ -53,11 +55,21 @@ checkTooNearPen x
     | otherwise = False
 
 --machine penalties
-checkMachinePenalty :: String -> Bool
+-- check each row all the num is number and it has 8 number in it
+checkMachinePenalty :: [String] -> Bool
 checkMachinePenalty [] = False 
-checkMachinePenalty x 
-    | (length x == 15) && (x!!1 == ' '&&x!!3 == ' '&& x!!5 == ' '&& x!!7 == ' ' && x!!9 == ' '&& x!!11 == ' '&& x!!13 == ' ') = True 
-    | otherwise = False
+checkMachinePenalty [x] = machinePenNumCheck (words x) && checkLengthMachinePenalty (words x)
+checkMachinePenalty (x:xs) =  machinePenNumCheck (words x) && checkLengthMachinePenalty (words x) && checkMachinePenalty xs
+
+machinePenNumCheck :: [String] -> Bool
+machinePenNumCheck [] = False
+machinePenNumCheck [x] = penCheck x 
+machinePenNumCheck (x:xs) = penCheck x && machinePenNumCheck xs 
+
+checkLengthMachinePenalty :: [String] -> Bool
+checkLengthMachinePenalty x 
+    | length x == 8 = True 
+    | otherwise =  False
 
 -- invalid machine/task
 letterCheck :: Char -> Bool 
