@@ -1,8 +1,13 @@
 module ConstaintsCheck(
     checkName,
-    checkFormat,
-    -- checkTooNearP,
-    checkMachinePenalty,
+    checkForcAndForbContent,
+    checkFormat2,
+    checkFormat3,
+    checkTooNearPen,
+    checkTooNearContent,
+    checkLengthRow,
+    checkLengthMachinePenalty,
+    checkMachinePenaltyContent,
     letterCheck,
     numCheck,
     errorPrint
@@ -12,64 +17,78 @@ import FileIO
 import Distribution.Simple.Utils (xargs)
 import System.Posix (SystemID(machine))
 
---Name
+-- Name (phasing error)
 checkName :: String -> Bool
 checkName [] = False
 checkName x
     | not(null x) && (' ' `notElem` x) =True
     | otherwise = False
 
---forced partial && forbidden machine && too-near Tasks: check format
-checkFormat :: String -> Bool
-checkFormat [] = False
-checkFormat x
+-- forced partial && forbidden machine && too-near Tasks: check format
+-- phasing error
+checkFormat2 :: String -> Bool
+checkFormat2 [] = True
+checkFormat2 x
     | (head x == '(') && (last x == ')') && (x!!2 == ',') && (length x == 5)= True
     | otherwise = False
 
 --forced partial && forbidden machine check
-checkForcAndForb :: String -> Bool
-checkForcAndForb [] = False
-checkForcAndForb x
-    | checkFormat x && numCheck (x!!1) && letterCheck (x!!3) = True
+-- invalid task or pen
+checkForcAndForbContent :: String -> Bool
+checkForcAndForbContent [] = True
+checkForcAndForbContent x
+    |  numCheck (x!!1) && letterCheck (x!!3) = True
     | otherwise = False
 
---too-near tasks check
-checkTooNear :: String -> Bool
-checkTooNear [] = False
-checkTooNear x
-    | checkFormat x && letterCheck (x!!1) && letterCheck (x!!3) = True
+--too-near tasks check content 
+-- invalid task (too near penalty)
+-- invalid task/mach(too near assign)
+checkTooNearContent :: String -> Bool
+checkTooNearContent [] = True
+checkTooNearContent x
+    | letterCheck (x!!1) && letterCheck (x!!3) = True
     | otherwise = False
 
 --too-near Penalities check assignemnt
-checkTooNearAssign :: String -> Bool
-checkTooNearAssign [] = False
-checkTooNearAssign x
+-- phasing error
+checkFormat3 :: String -> Bool
+checkFormat3 [] = True
+checkFormat3 x
     | (head x == '(') && (last x == ')') && (x!!2 == ',') && (x!!4== ',') = True
     | otherwise = False
 
 --too-near Penalities check penalty
+-- invalid pen
 checkTooNearPen :: String -> Bool
-checkTooNearPen [] = False
+checkTooNearPen [] = True
 checkTooNearPen x
     | penCheck (sliceList 4 ((length x)-1) x) = True
     | otherwise = False
 
 --machine penalties
--- check each row all the num is number and it has 8 number in it
--- when use this plz (checkMachinePenalty input && checkLengthMachinePenalty input) to get the full check of the machine penalties 
-checkMachinePenalty :: [String] -> Bool
-checkMachinePenalty [] = False 
-checkMachinePenalty [x] = machinePenNumCheck (words x) && checkLengthMachinePenalty (words x)
-checkMachinePenalty (x:xs) =  machinePenNumCheck (words x) && checkLengthMachinePenalty (words x) && checkMachinePenalty xs
+-- when use this plz (checkMachinePenaltyContent input && checkLengthMachinePenalty input) to get the full check of the machine penalties 
+-- invalid pen
+checkMachinePenaltyContent :: [String] -> Bool
+checkMachinePenaltyContent [] = False 
+checkMachinePenaltyContent [x] = machinePenNumCheck (words x)
+checkMachinePenaltyContent (x:xs) =  machinePenNumCheck (words x)  && checkMachinePenaltyContent xs
 
 machinePenNumCheck :: [String] -> Bool
 machinePenNumCheck [] = False
 machinePenNumCheck [x] = penCheck x 
 machinePenNumCheck (x:xs) = penCheck x && machinePenNumCheck xs 
 
+-- check each row all the num is number and it has 8 number in it
+-- checkLengthMachinePenalty constraints && checkLengthRow constraints
+-- phasing error
+checkLengthRow :: [String] -> Bool 
+checkLengthRow [] = False 
+checkLengthRow [x] = checkLengthMachinePenalty (words x) 
+checkLengthRow (x:xs) = checkLengthMachinePenalty (words x) && checkLengthRow xs 
+
 checkLengthMachinePenalty :: [String] -> Bool
 checkLengthMachinePenalty x 
-    | length x == 8 = True 
+    | length x == 8 = True
     | otherwise =  False
 
 -- invalid machine/task
