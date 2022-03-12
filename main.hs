@@ -18,18 +18,18 @@ main = do
         toonearTasks = sliceList (find2NTindex content) (findMPindex content) content
         machinePens = sliceList (findMPindex content) (find2NPindex content) content
         toonearPens = sliceList (find2NPindex content) (length content) content
-        constr = Constraint [0,2,-1] [[False,False,True],[True,False,False],[False,True,False]] [[False,False,True],[True,False,False],[False,False,False]] [[1,0,0],[0,2,0],[0,0,3]] [[0,2,0],[1,0,0],[0,0,0]]
-        minP = MinPenListInfo [1,1,1] 10000000
+        constr = Constraint [0,2,-1] [[False,False,True],[True,False,False],[False,True,False]] [[False,False,True],[True,False,False],[False,False,False]] [[0,0,0],[0,2,0],[0,0,3]] [[0,2,0],[1,0,0],[0,0,0]]
+        minP = MinPenListInfo [0,1,2] (penalty ([0,1,2], constr, 0))
         g = algo constr (permutations [0..2]) minP
     print partialAsgn
     print forbiddenMa
     print toonearTasks
     print machinePens
     print toonearPens
-    print (getList g)
-    print (getPen g)
+    -- print (getList g)
+    -- print (getPen g)
 
-    print(penalty ((getList g),constr,0))
+    -- print(penalty ((getList g), constr, 0))
 
 
     --Error check
@@ -68,6 +68,8 @@ main = do
         then return()
     else do writeFile (last args) "invalid penalty"
             exitSuccess
+    
+    print partialAsgn
 
     -- The text has been successfully passed
     writeFile (last args) "file parsed without problems"

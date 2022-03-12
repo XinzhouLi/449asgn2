@@ -1,13 +1,15 @@
 module ConstaintsCheck(
     checkName,
     checkFormat,
-    checkTooNearP,
+    -- checkTooNearP,
     checkMachinePenalty,
     letterCheck,
     numCheck,
     errorPrint
 )where
-    
+
+import FileIO
+
 --Name
 checkName :: String -> Bool
 checkName [] = False
@@ -15,18 +17,39 @@ checkName x
     | not(null x) && (' ' `notElem` x) =True
     | otherwise = False
 
---forced partial && forbidden machine && too-near Tasks
+--forced partial && forbidden machine && too-near Tasks: check format
 checkFormat :: String -> Bool
 checkFormat [] = False
 checkFormat x
     | (head x == '(') && (last x == ')') && (x!!2 == ',') && (length x == 5)= True
     | otherwise = False
 
---too-near Penalities
-checkTooNearP :: String -> Bool
-checkTooNearP [] = False
-checkTooNearP x
-    | (head x == '(') && (last x == ')') && (x!!2 == ',') && (x!!4== ',') && (length x == 7)= True
+--forced partial && forbidden machine check
+checkForcAndForb :: String -> Bool
+checkForcAndForb [] = False
+checkForcAndForb x
+    | checkFormat x && numCheck (x!!1) && letterCheck (x!!3) = True
+    | otherwise = False
+
+--too-near tasks check
+checkTooNear :: String -> Bool
+checkTooNear [] = False
+checkTooNear x
+    | checkFormat x && letterCheck (x!!1) && letterCheck (x!!3) = True
+    | otherwise = False
+
+--too-near Penalities check assignemnt
+checkTooNearAssign :: String -> Bool
+checkTooNearAssign [] = False
+checkTooNearAssign x
+    | (head x == '(') && (last x == ')') && (x!!2 == ',') && (x!!4== ',') = True
+    | otherwise = False
+
+--too-near Penalities check penalty
+checkTooNearPen :: String -> Bool
+checkTooNearPen [] = False
+checkTooNearPen x
+    | penCheck (sliceList 4 ((length x)-1) x) = True
     | otherwise = False
 
 --machine penalties
@@ -42,10 +65,20 @@ letterCheck x
     | x `elem` ['A'..'H'] = True 
     | otherwise = False
 
-numCheck :: Int -> Bool 
+numCheck :: Char -> Bool 
 numCheck x 
-    | x `elem` [1..8] = True 
+    | x `elem` ['1'..'8'] = True 
     | otherwise = False
+
+numCheck' :: Char -> Bool 
+numCheck' x 
+    | x `elem` ['0'..'9'] = True 
+    | otherwise = False
+
+penCheck :: String -> Bool
+penCheck [] = False
+penCheck [x] = numCheck' x
+penCheck (x:xs) = numCheck' x && penCheck xs
 
 --Output Errors
 errorPrint :: Int -> String

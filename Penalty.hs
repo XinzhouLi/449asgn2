@@ -19,7 +19,6 @@ getNearPenalty (Constraint _ _ _ _ nearPenalty) = nearPenalty
 -- input a task list ([0,...,7]), and all constraints (in Constraint data type)
 -- output its penalty (too near penalty + machine penalty)
 penalty :: ([Int], Constraint, Int) -> Int
-penalty ([], _, _) = 0
 penalty ([x], content, mach) = getMachPenalty content!!mach!!x
 penalty (x:xs, content, mach)
     -- add too near penalties of position 0 and 1, and position 7 and 0 when the first time run the function  

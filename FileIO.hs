@@ -7,6 +7,7 @@ module FileIO(
     deletEmp,
     ifBoolean,
     sliceList,
+    sliceList',
     findNameindex,
     find2NPindex,
     find2NTindex,
@@ -54,6 +55,9 @@ ifBoolean xs = and xs
 
 sliceList :: Int -> Int -> [a] -> [a]
 sliceList front end list = drop (front + 1) (take (end) list)
+
+sliceList' :: Int -> Int -> [a] -> [a]
+sliceList' front end list = drop (front) (take (end) list)
 
 findNameindex :: [[Char]] -> Int 
 findNameindex list = head (findIndices (=="Name:") list)
