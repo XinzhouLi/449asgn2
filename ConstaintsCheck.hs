@@ -56,6 +56,7 @@ checkTooNearPen x
 
 --machine penalties
 -- check each row all the num is number and it has 8 number in it
+-- when use this plz (checkMachinePenalty input && checkLengthMachinePenalty input) to get the full check of the machine penalties 
 checkMachinePenalty :: [String] -> Bool
 checkMachinePenalty [] = False 
 checkMachinePenalty [x] = machinePenNumCheck (words x) && checkLengthMachinePenalty (words x)
