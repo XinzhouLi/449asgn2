@@ -1,4 +1,4 @@
-module ConstaintsCheck(
+module ConstraintsCheck(
     mainConstraintsCheck,
     checkName,
     checkForcAndForbContent,
