@@ -33,7 +33,6 @@ tooNearConstr :: [String] -> [[Bool]]
 tooNearConstr x = tooNearConvert x (take 8 (cycle [(take 8 (cycle [False]))]))
 
 tooNearConvert :: [String] -> [[Bool]] -> [[Bool]]
-<<<<<<< HEAD
 tooNearConvert (l:ls) x
     | l  == [] = x
     | ls == [] = arrayBoolChange (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x
@@ -63,9 +62,6 @@ arrayBoolFindY y curY (l:ls)
     | curY == y = True : arrayBoolFindY y (curY+1) ls
     | otherwise = l : arrayBoolFindY y (curY+1) ls
 
-=======
-tooNearConvert _ x = x cycle 8 []
->>>>>>> refs/remotes/origin/main
 
 
 --machine Pens 8*8 matrix builder
@@ -77,7 +73,6 @@ machinePensConstr (x:xs) matrix = machinePensConstr xs (matrix ++ [listNumConver
 listNumConver :: [String] -> [Int] -> [Int]
 listNumConver [x] intList = intList ++ [read x + 0]
 listNumConver (x:xs) intList = listNumConver xs (intList ++ [read x + 0])
-<<<<<<< HEAD
 
 --convert letter to integer
 convLetToInt :: Char -> Int
@@ -102,5 +97,3 @@ convNumToInt '6' = 5
 convNumToInt '7' = 6
 convNumToInt '8' = 7
 convNumToInt x = -1
-=======
->>>>>>> refs/remotes/origin/main
