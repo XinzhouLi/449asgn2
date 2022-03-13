@@ -2,7 +2,7 @@ import FileIO
 import Permutations
 import Algorithm
 import Penalty
-import ConstaintsCheck
+import ConstraintsCheck
 import System.Exit (exitSuccess)
 import System.Directory.Internal.Prelude (getArgs)
 
