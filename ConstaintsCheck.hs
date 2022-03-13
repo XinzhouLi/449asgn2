@@ -1,4 +1,5 @@
 module ConstaintsCheck(
+    mainConstraintsCheck,
     checkName,
     checkForcAndForbContent,
     checkFormat2,
@@ -16,6 +17,7 @@ module ConstaintsCheck(
 import FileIO
 import Distribution.Simple.Utils (xargs)
 import System.Posix (SystemID(machine))
+import System.Exit (exitSuccess)
 
 -- Name (phasing error)
 checkName :: String -> Bool
@@ -147,3 +149,72 @@ convNumToInt '6' = 5
 convNumToInt '7' = 6
 convNumToInt '8' = 7
 convNumToInt x = -1
+
+
+
+
+
+mainConstraintsCheck:: [String] -> [String] -> [String] -> [String] -> [String] -> [String] -> [String] ->  IO ()
+mainConstraintsCheck arg name partialAsgn forbiddenMa toonearTasks machinePens toonearPens = do
+    -- check name
+    if ifBoolean (map checkName name)
+        then return()
+    else do writeFile (last arg) "Error while parsing input file"
+            exitSuccess
+
+    -- check forced partial assignment
+    if ifBoolean (map checkFormat2 partialAsgn)
+        then return ()
+    else do writeFile (last arg) "Error while parsing input file"
+            exitSuccess
+    if ifBoolean (map checkForcAndForbContent partialAsgn)
+        then return ()
+    else do writeFile (last arg) "invalid machine/task"
+            exitSuccess
+ 
+    -- check forbidden machine
+    if ifBoolean (map checkFormat2 forbiddenMa)
+        then return ()
+    else do writeFile (last arg) "Error while parsing input file"
+            exitSuccess
+    if ifBoolean (map checkForcAndForbContent forbiddenMa)
+        then return ()
+    else do writeFile (last arg) "invalid machine/task"
+            exitSuccess
+
+    -- check too near task
+    if ifBoolean (map checkFormat2 toonearTasks)
+        then return ()
+    else do writeFile (last arg) "Error while parsing input file"
+            exitSuccess
+
+    if ifBoolean (map checkTooNearContent toonearTasks)
+        then return ()
+    else do writeFile (last arg) "invalid machine/task"
+            exitSuccess
+
+    -- check machine penalty
+    if checkLengthMachinePenalty machinePens && checkLengthRow machinePens
+        then return ()
+    else do writeFile (last arg) "Error while parsing input file"
+            exitSuccess
+    if checkMachinePenaltyContent machinePens
+        then return ()
+    else do writeFile (last arg) "invalid penalty"
+            exitSuccess
+
+    -- check too near penalty
+    if ifBoolean (map checkFormat3 toonearPens)
+        then return ()
+    else do writeFile (last arg) "Error while parsing input file"
+            exitSuccess
+    if ifBoolean (map checkTooNearPen toonearPens) 
+        then return ()
+    else do writeFile (last arg) "invalid penalty"
+            exitSuccess
+    if ifBoolean (map checkTooNearContent toonearPens)
+        then return ()
+    else do writeFile (last arg) "invalid machine"
+            exitSuccess
+ 
+
