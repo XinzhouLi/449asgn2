@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 module ConstraintConstr (
     Constraint(Constraint),
     getForcedPartial,
@@ -8,7 +9,8 @@ module ConstraintConstr (
     forcedPartialConstr,
     tooNearConstr,
     forbiddenConstr,
-    machinePensConstr
+    machinePensConstr,
+    constraintConstructor
 )
 where
 
@@ -130,8 +132,10 @@ arrayBoolFindYforbid y curY (l:ls)
 getSingleTooNear :: String -> [Int]
 getSingleTooNear (x : ',' : y : ',' : pen) =  convLetToInt x : convLetToInt y : [read pen + 0]
 
-tooNearPen :: [String] -> [[Int]]
-tooNearPen x = tooNearPenConvert x (take 8 (cycle [(take 8 (cycle [0]))]))
+-- too near penality constructor 
+-- input string out put 8*8 matrix 
+tooNearPenConstr :: [String] -> [[Int]]
+tooNearPenConstr x = tooNearPenConvert x (take 8 (cycle [(take 8 (cycle [0]))]))
 
 tooNearPenConvert :: [String] -> [[Int]] -> [[Int]]
 tooNearPenConvert (l:ls) x
@@ -187,3 +191,7 @@ convNumToInt '6' = 5
 convNumToInt '7' = 6
 convNumToInt '8' = 7
 convNumToInt x = -1
+
+
+constraintConstructor :: [String] -> [String] -> [String] -> [String] -> [String] -> Constraint
+constraintConstructor partialAsgn forbiddenMa toonearTasks machinePens toonearPens = Constraint (forcedPartialConstr partialAsgn) (forbiddenConstr forbiddenMa) (tooNearConstr toonearTasks) (machinePensConstr machinePens [])(tooNearPenConstr toonearPens)
