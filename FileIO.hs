@@ -1,13 +1,7 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Use elemIndices" #-}
-
 module FileIO(
     inputFileIO,
     outputFileIO,
-    deletEmp,
-    ifBoolean,
     sliceList,
-    sliceList',
     findNameindex,
     find2NPindex,
     find2NTindex,
@@ -16,19 +10,17 @@ module FileIO(
     findMPindex
 )where
 
-import Permutations
 import System.Environment
 import System.IO
-import Data.List (findIndex, findIndices)
+import Data.List (findIndices)
 import Data.Text (stripEnd)
 import qualified Data.Text as T
-rstrip::String->String 
+
+
+rstrip :: String->String 
 rstrip = T.unpack . T.stripEnd . T.pack
 
-
-
-
-
+-- get all lines in the input file
 inputFileIO :: IO[String]
 inputFileIO = do
     args <- getArgs
@@ -36,8 +28,7 @@ inputFileIO = do
     contents <- readFile (head args)
     return (deletEmp(map rstrip(lines contents)))
 
-
-
+-- write the output message to the output file
 outputFileIO :: String -> IO ()
 outputFileIO message = do
     args <- getArgs
@@ -49,15 +40,8 @@ deletEmp (x:xs)
     | x == "" = deletEmp xs
     | otherwise = x:deletEmp xs
 
-ifBoolean :: [Bool] -> Bool
-ifBoolean [] = True
-ifBoolean xs = and xs
-
 sliceList :: Int -> Int -> [a] -> [a]
 sliceList front end list = drop (front + 1) (take (end) list)
-
-sliceList' :: Int -> Int -> [a] -> [a]
-sliceList' front end list = drop (front) (take (end) list)
 
 findNameindex :: [[Char]] -> Int 
 findNameindex list = head (findIndices (=="Name:") list)
