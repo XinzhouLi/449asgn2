@@ -31,7 +31,7 @@ main = do
     do mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toonearPens
 
     --Construct constraints
-    if getForcedPartial constraints == [0,0,0,0,0,0,0,0]
+    if getForcedPartial constraints /= [0,0,0,0,0,0,0,0]
         then return()
     else do outputFileIO "partial assignment error"
             exitSuccess
