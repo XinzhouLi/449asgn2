@@ -1,8 +1,7 @@
 import FileIO
-import Permutations
 import Algorithm
-import Penalty
 import ConstraintsCheck
+import ConstraintConstr
 import System.Exit (exitSuccess)
 import System.Directory.Internal.Prelude (getArgs)
 
@@ -18,9 +17,9 @@ main = do
         toonearTasks = sliceList (find2NTindex content) (findMPindex content) content
         machinePens = sliceList (findMPindex content) (find2NPindex content) content
         toonearPens = sliceList (find2NPindex content) (length content) content
-        constr = Constraint [0,2,-1] [[False,False,True],[True,False,False],[False,True,False]] [[False,False,True],[True,False,False],[False,False,False]] [[0,0,0],[0,2,0],[0,0,3]] [[0,2,0],[1,0,0],[0,0,0]]
-        minP = MinPenListInfo [0,1,2] (penalty ([0,1,2], constr, 0))
-        g = algo constr (permutations [0..2]) minP
+        -- constr = Constraint [0,2,-1] [[False,False,True],[True,False,False],[False,True,False]] [[False,False,True],[True,False,False],[False,False,False]] [[0,0,0],[0,2,0],[0,0,3]] [[0,2,0],[1,0,0],[0,0,0]]
+        -- minP = MinPenListInfo [0,0,0] 1231
+        -- g = algo constr (permutations [0..2]) minP
     print partialAsgn
     print forbiddenMa
     print toonearTasks
@@ -33,4 +32,4 @@ main = do
 
 
     --Error check
-    do mainConstraintsCheck args name partialAsgn forbiddenMa toonearTasks machinePens toonearPens
+    do mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toonearPens
