@@ -10,7 +10,8 @@ module ConstraintConstr (
     tooNearConstr,
     forbiddenConstr,
     machinePensConstr,
-    constraintConstructor
+    constraintConstructor,
+    getForcedPartial
 )
 where
 
