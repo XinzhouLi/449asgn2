@@ -1,5 +1,7 @@
 Name:
-wrongtooneartask
+garbage
+
+#No comments allowed
 
 forced partial assignment:
 (1,A)
@@ -23,5 +25,4 @@ machine penalties:
 1 1 1 1 1 1 1 1
 
 too-near penalities
-(A,C,7)
-(B,X,3)
+(A,C,4)

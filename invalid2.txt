@@ -1,5 +1,5 @@
 Name:
-wrongtooneartask
+invalid2
 
 forced partial assignment:
 (1,A)
@@ -9,8 +9,13 @@ forced partial assignment:
 (5,E)
 
 forbidden machine:
+(7,F)
  
 too-near tasks:
+(G,H)
+(H,G)
+(A,H)
+(H,A)
 
 machine penalties:
 1 1 1 1 1 1 1 1
@@ -23,5 +28,4 @@ machine penalties:
 1 1 1 1 1 1 1 1
 
 too-near penalities
-(A,C,7)
-(B,X,3)
+
