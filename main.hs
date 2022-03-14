@@ -29,9 +29,6 @@ main = do
 
     let
         constraints = constraintConstructor partialAsgn forbiddenMa toonearTasks machinePens toonearPens
-    
-    print ( getNearPenalty constraints)
-    let
         result = findMin constraints (MinPenListInfo [0,0,0,0,0,0,0,0] (maxBound :: Int))
 
     --Error check
@@ -43,14 +40,12 @@ main = do
     else do outputFileIO "partial assignment error"
             exitSuccess
 
-    print (getList result)
     --Calculate the reuslt
     if (getList result) /= [0,0,0,0,0,0,0,0]
         then return()
     else do outputFileIO "No valid solution possible!"
             exitSuccess
 
-    print (getList result)
     outputFileIO (resultOutput (getList result) (getPen result))
 
 
