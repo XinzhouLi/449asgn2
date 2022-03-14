@@ -35,8 +35,9 @@ algo constraints (permu:remainPermu) minPenInfo
 
 -- check if the input permutation obeys all the hard constraints
 checkHardConstraints :: Constraint -> [Int] -> Bool
-checkHardConstraints _ [] = True
-checkHardConstraints constraints permu = (passesForcedAssignment (getForcedPartial constraints) permu) && (passesForbiddenMachine (getForbidden constraints) permu) && (passesTooNearMach (getNearTask constraints) permu)
+checkHardConstraints constraints permu 
+    | (passesForcedAssignment (getForcedPartial constraints) permu) && (passesForbiddenMachine (getForbidden constraints) permu) && (passesTooNearMach (getNearTask constraints) permu) = True 
+    | otherwise  = False
 
 -- to check whether the input assignment passes the forced partial assignment
 -- input [Int] for forced assignment constraint, and [Int] for current assignemnt
@@ -111,6 +112,7 @@ resultOutput :: [Int] -> Int -> String
 resultOutput reList rePen = "Solution" ++ numToString reList [] ++ "; Quality: " ++ show rePen
 
 numToString :: [Int] -> String -> String
+numToString [] str = ""
 numToString [x] str = str ++ " " ++ convLetToInt x
 numToString (x:xs) str = numToString xs (str ++ " " ++ convLetToInt x )
 
