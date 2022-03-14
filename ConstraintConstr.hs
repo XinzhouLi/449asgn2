@@ -1,4 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 module ConstraintConstr (
     Constraint(Constraint),
     getForcedPartial,
@@ -6,12 +5,7 @@ module ConstraintConstr (
     getNearTask,
     getMachPenalty,
     getNearPenalty,
-    forcedPartialConstr,
-    tooNearConstr,
-    forbiddenConstr,
-    machinePensConstr,
     constraintConstructor,
-    getForcedPartial
 )
 where
 
