@@ -1,10 +1,33 @@
 module ConstraintConstr (
+    Constraint(Constraint),
+    getForcedPartial,
+    getForbidden,
+    getNearTask,
+    getMachPenalty,
+    getNearPenalty,
     forcedPartialConstr,
     tooNearConstr,
     forbiddenConstr,
     machinePensConstr
 )
 where
+
+import FileIO
+
+-- define a data type that to store all constraints input from file
+data Constraint = Constraint [Int] [[Bool]] [[Bool]] [[Int]] [[Int]]
+
+-- define functions to get the constraints information
+getForcedPartial :: Constraint -> [Int]
+getForcedPartial (Constraint forcedPartial _ _ _ _) = forcedPartial
+getForbidden :: Constraint -> [[Bool]]
+getForbidden (Constraint _ forbidden _ _ _) = forbidden
+getNearTask :: Constraint -> [[Bool]]
+getNearTask (Constraint _ _ nearTask _ _) = nearTask
+getMachPenalty :: Constraint -> [[Int]]
+getMachPenalty (Constraint _ _ _ machPenalty _) = machPenalty
+getNearPenalty :: Constraint -> [[Int]]
+getNearPenalty (Constraint _ _ _ _ nearPenalty) = nearPenalty
 
 -- input forced partial assignment
 -- output 1x8 Int array
@@ -97,3 +120,10 @@ convNumToInt '6' = 5
 convNumToInt '7' = 6
 convNumToInt '8' = 7
 convNumToInt x = -1
+
+
+-- [String] -> [[Int]]
+-- l:ls l
+
+-- test :: String -> [Int]
+-- test (x : ',' : y : ',' : pen) = convLetToInt x : convLetToInt y : [read pen + 0]
