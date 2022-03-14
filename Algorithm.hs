@@ -31,9 +31,10 @@ algo constraints (permu:remainPermu) minPenInfo
     | checkHardConstraints constraints permu = algo constraints remainPermu (calMinList constraints permu minPenInfo)
     | otherwise = algo constraints remainPermu minPenInfo
 
+-- check if the input permutation obeys all the hard constraints
 checkHardConstraints :: Constraint -> [Int] -> Bool
 checkHardConstraints constraints permu
-    | permu /= [] = True -- check if the input permutation obeys all the hard constraints
+    | permu /= [] = True 
     | otherwise = False
 
 -- to check whether the input assignment passes the forced partial assignment
@@ -56,11 +57,16 @@ passesForbiddenMachine (first_row : rest)  (x : xs)
     | first_row !! x == False = False
     | otherwise = True && passesForbiddenMachine rest xs
 
--- --------------------------------------------------------------------------------------------------------------------
+-- to check whether the input assignment passes the too near machine constraints
+-- input [[Bool]] 8x8 array for too near machine constraint, and [Int] for current assignment
+-- return True if pass the too near machine constraints, otherwise, return false
+passesTooNearMach :: [[Bool]] -> [Int] -> Bool
+passesTooNearMach _ [] = True
+passesTooNearMach constr (x:xs)
+    | length xs == 7 = constr!!x!!(head xs) && constr!!(last xs)!!x && passesTooNearMach constr xs
+    | length xs == 0 = True
+    | otherwise      = constr!!x!!(head xs) && passesTooNearMach constr xs
 
--- passesTooNearMach needed to be completed
-
--- --------------------------------------------------------------------------------------------------------------------
 
 calMinList :: Constraint -> [Int] -> MinPenListInfo -> MinPenListInfo
 calMinList constraints permu (MinPenListInfo minList minPen)
@@ -98,4 +104,4 @@ penalty (x:xs, content, mach)
     -- add too near penalties of position 0 and 1, and position 7 and 0 when the first time run the function  
     | mach == 0 = getMachPenalty content!!mach!!x + getNearPenalty content!!mach!!head xs + getNearPenalty content!!last xs!!x + penalty (xs, content, mach+1)
     -- add too near penalty of current position and next position 
-    | otherwise      = getMachPenalty content!!mach!!x + getNearPenalty content!!x!!head xs + penalty (xs, content, mach+1)
+    | otherwise = getMachPenalty content!!mach!!x + getNearPenalty content!!x!!head xs + penalty (xs, content, mach+1)
