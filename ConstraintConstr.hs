@@ -74,17 +74,19 @@ forcedPartialConvert (x:xs) [x1,x2,x3,x4,x5,x6,x7,x8]
 -- input too near machine
 -- output 8x8 boolean arrray ((x,y) is True if (x,y) is a too near machine, otherwise if False)
 tooNearConstr :: [String] -> [[Bool]]
-tooNearConstr x = tooNearConvert x (take 8 (cycle [(take 8 (cycle [False]))]))
+tooNearConstr [] = take 8 (cycle [(take 8 (cycle [True]))])
+tooNearConstr x = tooNearConvert x (take 8 (cycle [(take 8 (cycle [True]))]))
 
 tooNearConvert :: [String] -> [[Bool]] -> [[Bool]]
 tooNearConvert (l:ls) x
     | l  == [] = x
-    | ls == [] = arrayBoolChange (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x
-    | otherwise = tooNearConvert ls (arrayBoolChange (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
+    | ls == [] = arrayBoolChangeForbid (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x
+    | otherwise = tooNearConvert ls (arrayBoolChangeForbid (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
 
 -- input forbidden assignment
 -- output 8x8 boolean arrray ((x,y) is False if (x,y) is a forbidden assignment, otherwise if True)
 forbiddenConstr :: [String] -> [[Bool]]
+forbiddenConstr [] = take 8 (cycle [(take 8 (cycle [True]))])
 forbiddenConstr x = forbiddenConvert x (take 8 (cycle [(take 8 (cycle [True]))]))
 
 forbiddenConvert :: [String] -> [[Bool]] -> [[Bool]]
@@ -130,6 +132,7 @@ getSingleTooNear (x : ',' : y : ',' : pen) =  convLetToInt x : convLetToInt y : 
 -- too near penality constructor 
 -- input string out put 8*8 matrix 
 tooNearPenConstr :: [String] -> [[Int]]
+tooNearPenConstr [] = take 8 (cycle [(take 8 (cycle [0]))])
 tooNearPenConstr x = tooNearPenConvert x (take 8 (cycle [(take 8 (cycle [0]))]))
 
 tooNearPenConvert :: [String] -> [[Int]] -> [[Int]]

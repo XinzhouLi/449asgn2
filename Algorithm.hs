@@ -23,19 +23,19 @@ getPen (MinPenListInfo _ x) = x
 -- input the constraints and the initial minPenInfo
 -- output the solution and its penalty
 findMin :: Constraint -> MinPenListInfo -> MinPenListInfo
-findMin constraints minInfo = algo constraints (permutations [1..8]) minInfo
+findMin constraints minInfo = algo constraints (permutations [0..7]) minInfo
 
 -- input the constraints, all possible solutions (permutations of [1..8]), and inital MinPenInfo
 -- output the solution and its penalty
 algo :: Constraint -> [[Int]] -> MinPenListInfo -> MinPenListInfo
 algo constraints (permu:remainPermu) minPenInfo
-    | null remainPermu = minPenInfo
+    | null remainPermu = calMinList constraints permu minPenInfo
     | checkHardConstraints constraints permu = algo constraints remainPermu (calMinList constraints permu minPenInfo)
     | otherwise = algo constraints remainPermu minPenInfo
 
 -- check if the input permutation obeys all the hard constraints
 checkHardConstraints :: Constraint -> [Int] -> Bool
-checkHardConstraints _ [] = False
+checkHardConstraints _ [] = True
 checkHardConstraints constraints permu = (passesForcedAssignment (getForcedPartial constraints) permu) && (passesForbiddenMachine (getForbidden constraints) permu) && (passesTooNearMach (getNearTask constraints) permu)
 
 -- to check whether the input assignment passes the forced partial assignment
@@ -43,7 +43,7 @@ checkHardConstraints constraints permu = (passesForcedAssignment (getForcedParti
 -- return True if pass the forced partial assignment, otherwise, return false
 passesForcedAssignment :: (Eq a, Num a) => [a] -> [a] -> Bool
 passesForcedAssignment [] [] = True
-passesForcedAssignment [] (y:ys) = False
+passesForcedAssignment [] (y:ys) = True
 passesForcedAssignment (x:xs) [] = False
 passesForcedAssignment (x:xs) (y:ys) 
     | x == -1 || x==y = passesForcedAssignment xs ys
