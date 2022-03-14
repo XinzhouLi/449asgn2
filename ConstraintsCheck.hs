@@ -44,7 +44,7 @@ checkTooNearContent x
 checkLengthRow :: [String] -> Bool 
 checkLengthRow [] = False 
 checkLengthRow [x] = checkLengthMachinePenalty (words x) 
-checkLengthRow (x:xs) = checkLengthMachinePenalty (words x) && checkLengthRow xs 
+checkLengthRow (x:xs) = checkLengthMachinePenalty (words x) && checkLengthRow xs  
 
 checkLengthMachinePenalty :: [String] -> Bool
 checkLengthMachinePenalty x 
@@ -151,7 +151,7 @@ mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toone
     -- check machine penalty
     if checkLengthMachinePenalty machinePens && checkLengthRow machinePens
         then return ()
-    else do outputFileIO "Error while parsing input file"
+    else do outputFileIO "machine penalty error"
             exitSuccess
     if checkMachinePenaltyContent machinePens
         then return ()
@@ -169,6 +169,6 @@ mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toone
             exitSuccess
     if ifBoolean (map checkTooNearContent toonearPens)
         then return ()
-    else do outputFileIO "invalid machine"
+    else do outputFileIO "invalid task"
             exitSuccess
  
