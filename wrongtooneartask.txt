@@ -1,5 +1,5 @@
 Name:
-wrongtooneartask
+wrongtooneartask 
 
 forced partial assignment:
 (1,A)
