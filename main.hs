@@ -23,8 +23,26 @@ main = do
     print machinePens
     print toonearPens
 
-    let 
+    let
         constraints = constraintConstructor partialAsgn forbiddenMa toonearTasks machinePens toonearPens
+        result = findMin constraints (MinPenListInfo [] (maxBound :: Int))
+
     --Error check
     do mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toonearPens
-    
+
+    --Construct constraints
+    if getForcedPartial constraints == [0,0,0,0,0,0,0,0]
+        then return()
+    else do outputFileIO "partial assignment error"
+            exitSuccess
+
+    --Calculate the reuslt
+    if null (getList result)
+        then return()
+    else do outputFileIO "No valid solution possible!"
+            exitSuccess
+
+    outputFileIO (resultOutput (getList result) (getPen result))
+
+
+

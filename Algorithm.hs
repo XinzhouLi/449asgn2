@@ -1,8 +1,10 @@
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 module Algorithm (
     MinPenListInfo(MinPenListInfo),
     findMin,
     getList,
-    getPen
+    getPen,
+    resultOutput
 )
 where
 
@@ -105,3 +107,21 @@ penalty (x:xs, content, mach)
     | mach == 0 = getMachPenalty content!!mach!!x + getNearPenalty content!!mach!!head xs + getNearPenalty content!!last xs!!x + penalty (xs, content, mach+1)
     -- add too near penalty of current position and next position 
     | otherwise = getMachPenalty content!!mach!!x + getNearPenalty content!!x!!head xs + penalty (xs, content, mach+1)
+
+resultOutput :: [Int] -> Int -> String 
+resultOutput reList rePen = "Solution" ++ numToString reList [] ++ "; Quality: " ++ show rePen
+
+numToString :: [Int] -> String -> String
+numToString [x] str = str ++ " " ++ convLetToInt x
+numToString (x:xs) str = numToString xs (str ++ " " ++ convLetToInt x )
+
+convLetToInt :: Int -> [Char] 
+convLetToInt 0=['A'] 
+convLetToInt 1=['B']
+convLetToInt 2=['C']  
+convLetToInt 3=['D'] 
+convLetToInt 4=['E'] 
+convLetToInt 5=['F']
+convLetToInt 6=['G'] 
+convLetToInt 7=['H'] 
+convLetToInt x = ['X']
