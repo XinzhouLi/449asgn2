@@ -29,7 +29,8 @@ findMin constraints minInfo = algo constraints (permutations [0..7]) minInfo
 -- output the solution and its penalty
 algo :: Constraint -> [[Int]] -> MinPenListInfo -> MinPenListInfo
 algo constraints (permu:remainPermu) minPenInfo
-    | null remainPermu = calMinList constraints permu minPenInfo
+    | null remainPermu && (checkHardConstraints constraints permu) = calMinList constraints permu minPenInfo
+    | null remainPermu = minPenInfo
     | checkHardConstraints constraints permu = algo constraints remainPermu (calMinList constraints permu minPenInfo)
     | otherwise = algo constraints remainPermu minPenInfo
 
