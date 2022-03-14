@@ -21,20 +21,20 @@ main = do
         toonearTasks = sliceList (find2NTindex content) (findMPindex content) content
         machinePens = sliceList (findMPindex content) (find2NPindex content) content
         toonearPens = sliceList (find2NPindex content) (length content) content
-    print partialAsgn
-    print forbiddenMa
-    print toonearTasks
-    print machinePens
-    print toonearPens
+    -- print partialAsgn
+    -- print forbiddenMa
+    -- print toonearTasks
+    -- print machinePens
+    -- print toonearPens
 
     let
+        --Construct constraints
         constraints = constraintConstructor partialAsgn forbiddenMa toonearTasks machinePens toonearPens
         result = findMin constraints (MinPenListInfo [0,0,0,0,0,0,0,0] (maxBound :: Int))
 
     --Error check
     do mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toonearPens
 
-    --Construct constraints
     if getForcedPartial constraints /= [0,0,0,0,0,0,0,0]
         then return()
     else do outputFileIO "partial assignment error"
@@ -47,6 +47,4 @@ main = do
             exitSuccess
 
     outputFileIO (resultOutput (getList result) (getPen result))
-
-
-
+    print (resultOutput (getList result) (getPen result))

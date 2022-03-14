@@ -80,8 +80,8 @@ tooNearConstr x = tooNearConvert x (take 8 (cycle [(take 8 (cycle [True]))]))
 tooNearConvert :: [String] -> [[Bool]] -> [[Bool]]
 tooNearConvert (l:ls) x
     | l  == [] = x
-    | ls == [] = arrayBoolChangeForbid (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x
-    | otherwise = tooNearConvert ls (arrayBoolChangeForbid (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
+    | ls == [] = arrayBoolChange (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x
+    | otherwise = tooNearConvert ls (arrayBoolChange (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
 
 -- input forbidden assignment
 -- output 8x8 boolean arrray ((x,y) is False if (x,y) is a forbidden assignment, otherwise if True)
@@ -92,37 +92,23 @@ forbiddenConstr x = forbiddenConvert x (take 8 (cycle [(take 8 (cycle [True]))])
 forbiddenConvert :: [String] -> [[Bool]] -> [[Bool]]
 forbiddenConvert (l:ls) x
     | l  == [] = x
-    | ls == [] = arrayBoolChangeForbid (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x
-    | otherwise = forbiddenConvert ls (arrayBoolChangeForbid (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
+    | ls == [] = arrayBoolChange (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x
+    | otherwise = forbiddenConvert ls (arrayBoolChange (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
 
 -- input x, y, current X, 8x8 Boolean array
 -- output (x,y)=True, 8x8 Boolean array
 arrayBoolChange :: Int -> Int -> Int -> [[Bool]] -> [[Bool]]
 arrayBoolChange x y curX [] = []
 arrayBoolChange x y curX (l:ls)
-    | ls == [] && curX == x = [arrayBoolFindY y 0 l]
-    | ls == [] = [l]
-    | curX == x = arrayBoolFindY y 0 l : arrayBoolChange x y (curX+1) ls
-    | otherwise = l: arrayBoolChange x y (curX+1) ls  
-arrayBoolFindY :: Int -> Int -> [Bool] -> [Bool]
-arrayBoolFindY y curY (l:ls) 
-    | ls == [] && curY == y = [True]
-    | ls == [] = [False]
-    | curY == y = True : arrayBoolFindY y (curY+1) ls
-    | otherwise = l : arrayBoolFindY y (curY+1) ls
-
-arrayBoolChangeForbid :: Int -> Int -> Int -> [[Bool]] -> [[Bool]]
-arrayBoolChangeForbid x y curX [] = []
-arrayBoolChangeForbid x y curX (l:ls)
     | ls == [] && curX == x = [arrayBoolFindYforbid y 0 l]
     | ls == [] = [l]
-    | curX == x = arrayBoolFindYforbid y 0 l : arrayBoolChangeForbid x y (curX+1) ls
-    | otherwise = l: arrayBoolChangeForbid x y (curX+1) ls  
+    | curX == x = arrayBoolFindYforbid y 0 l : arrayBoolChange x y (curX+1) ls
+    | otherwise = l: arrayBoolChange x y (curX+1) ls  
 
 arrayBoolFindYforbid :: Int -> Int -> [Bool] -> [Bool]
 arrayBoolFindYforbid y curY (l:ls) 
     | ls == [] && curY == y = [False]
-    | ls == [] = [True]
+    | ls == [] = [l]
     | curY == y = False : arrayBoolFindYforbid y (curY+1) ls
     | otherwise = l : arrayBoolFindYforbid y (curY+1) ls
 
@@ -151,7 +137,7 @@ arrayIntChange x y z curX (l:ls)
 arrayIntFindY :: Int -> Int -> Int -> [Int] -> [Int]
 arrayIntFindY y z curY (l:ls) 
     | ls == [] && curY == y = [z]
-    | ls == [] = [0]
+    | ls == [] = [l]
     | curY == y = z : arrayIntFindY y z (curY+1) ls
     | otherwise = l : arrayIntFindY y z (curY+1) ls
 
