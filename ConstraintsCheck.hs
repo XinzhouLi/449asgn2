@@ -169,6 +169,6 @@ mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toone
             exitSuccess
     if ifBoolean (map checkTooNearContent toonearPens)
         then return ()
-    else do outputFileIO "invalid machine"
+    else do outputFileIO "invalid task"
             exitSuccess
  
