@@ -36,6 +36,32 @@ checkHardConstraints constraints permu
     | permu /= [] = True -- check if the input permutation obeys all the hard constraints
     | otherwise = False
 
+-- to check whether the input assignment passes the forced partial assignment
+-- input [Int] for forced assignment constraint, and [Int] for current assignemnt
+-- return True if pass the forced partial assignment, otherwise, return false
+passesForcedAssignment :: (Eq a, Num a) => [a] -> [a] -> Bool
+passesForcedAssignment [] [] = True
+passesForcedAssignment [] (y:ys) = False
+passesForcedAssignment (x:xs) [] = False
+passesForcedAssignment (x:xs) (y:ys) 
+    | x == -1 || x==y = passesForcedAssignment xs ys
+    | otherwise = False
+
+-- to check whether the input assignment passes the forbidden assignment
+-- input [[Bool]] 8x8 array for forbidden assignment constraint, and [Int] for current assignemnt
+-- return True if pass the forced partial assignment, otherwise, return false
+passesForbiddenMachine :: [[Bool]] -> [Int] -> Bool
+passesForbiddenMachine [] [] = True
+passesForbiddenMachine (first_row : rest)  (x : xs) 
+    | first_row !! x == False = False
+    | otherwise = True && passesForbiddenMachine rest xs
+
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- passesTooNearMach needed to be completed
+
+-- --------------------------------------------------------------------------------------------------------------------
+
 calMinList :: Constraint -> [Int] -> MinPenListInfo -> MinPenListInfo
 calMinList constraints permu (MinPenListInfo minList minPen)
     | penalty (permu,constraints,0) < minPen = MinPenListInfo permu (penalty (permu,constraints,0))
