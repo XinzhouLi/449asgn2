@@ -6,6 +6,7 @@ module ConstraintConstr (
 )
 where
 
+import Penalty
 import FileIO
 
 -- input forced partial assignment
@@ -64,13 +65,13 @@ tooNearConvert (l:ls) x
     | otherwise = tooNearConvert ls (arrayBoolChange (convLetToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
 
 forbiddenConstr :: [String] -> [[Bool]]
-forbiddenConstr x = forbiddenConvert x (take 8 (cycle [(take 8 (cycle [False]))]))
+forbiddenConstr x = forbiddenConvert x (take 8 (cycle [(take 8 (cycle [True]))]))
 
 forbiddenConvert :: [String] -> [[Bool]] -> [[Bool]]
 forbiddenConvert (l:ls) x
     | l  == [] = x
-    | ls == [] = arrayBoolChange (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x
-    | otherwise = forbiddenConvert ls (arrayBoolChange (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
+    | ls == [] = arrayBoolChangeForbid (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x
+    | otherwise = forbiddenConvert ls (arrayBoolChangeForbid (convNumToInt (l!!1)) (convLetToInt (l!!3)) 0 x)
 
 
 -- input x, y, current X, 8x8 Boolean array
@@ -81,7 +82,7 @@ arrayBoolChange x y curX (l:ls)
     | ls == [] && curX == x = [arrayBoolFindY y 0 l]
     | ls == [] = [l]
     | curX == x = arrayBoolFindY y 0 l : arrayBoolChange x y (curX+1) ls
-    | otherwise = l: arrayBoolChange x y (curX+1) ls
+    | otherwise = l: arrayBoolChange x y (curX+1) ls  
 arrayBoolFindY :: Int -> Int -> [Bool] -> [Bool]
 arrayBoolFindY y curY (l:ls) 
     | ls == [] && curY == y = [True]
@@ -89,16 +90,24 @@ arrayBoolFindY y curY (l:ls)
     | curY == y = True : arrayBoolFindY y (curY+1) ls
     | otherwise = l : arrayBoolFindY y (curY+1) ls
 
+arrayBoolChangeForbid :: Int -> Int -> Int -> [[Bool]] -> [[Bool]]
+arrayBoolChangeForbid x y curX [] = []
+arrayBoolChangeForbid x y curX (l:ls)
+    | ls == [] && curX == x = [arrayBoolFindYforbid y 0 l]
+    | ls == [] = [l]
+    | curX == x = arrayBoolFindYforbid y 0 l : arrayBoolChangeForbid x y (curX+1) ls
+    | otherwise = l: arrayBoolChangeForbid x y (curX+1) ls  
 
---machine Pens 8*8 matrix builder
-machinePensConstr :: [String] ->  [[Int]] -> [[Int]]
-machinePensConstr [x] matrix = matrix ++ [listNumConver (words x) []]
-machinePensConstr (x:xs) matrix = machinePensConstr xs (matrix ++ [listNumConver (words x) []])
+arrayBoolFindYforbid :: Int -> Int -> [Bool] -> [Bool]
+arrayBoolFindYforbid y curY (l:ls) 
+    | ls == [] && curY == y = [False]
+    | ls == [] = [True]
+    | curY == y = False : arrayBoolFindYforbid y (curY+1) ls
+    | otherwise = l : arrayBoolFindYforbid y (curY+1) ls
 
 getSingleTooNear :: String -> [Int]
 getSingleTooNear (x : ',' : y : ',' : pen) =  convLetToInt x : convLetToInt y : [read pen + 0]
 
---Too near Pen 8*8 maxtrix builder
 tooNearPen :: [String] -> [[Int]]
 tooNearPen x = tooNearPenConvert x (take 8 (cycle [(take 8 (cycle [0]))]))
 
@@ -114,13 +123,20 @@ arrayIntChange x y z curX (l:ls)
     | ls == [] && curX == x = [arrayIntFindY y z 0 l]
     | ls == [] = [l]
     | curX == x = arrayIntFindY y z 0 l : arrayIntChange x y z (curX+1) ls
-    | otherwise = l: arrayIntChange x y z (curX+1) ls
+    | otherwise = l: arrayIntChange x y z (curX+1) ls  
 arrayIntFindY :: Int -> Int -> Int -> [Int] -> [Int]
 arrayIntFindY y z curY (l:ls) 
     | ls == [] && curY == y = [z]
     | ls == [] = [0]
     | curY == y = z : arrayIntFindY y z (curY+1) ls
     | otherwise = l : arrayIntFindY y z (curY+1) ls
+
+
+--machine Pens 8*8 matrix builder
+machinePensConstr :: [String] ->  [[Int]] -> [[Int]]
+machinePensConstr [x] matrix = matrix ++ [listNumConver (words x) []]
+machinePensConstr (x:xs) matrix = machinePensConstr xs (matrix ++ [listNumConver (words x) []])
+
 
 listNumConver :: [String] -> [Int] -> [Int]
 listNumConver [x] intList = intList ++ [read x + 0]
@@ -149,4 +165,12 @@ convNumToInt '6' = 5
 convNumToInt '7' = 6
 convNumToInt '8' = 7
 convNumToInt x = -1
+
+
+passesForbiddenMachine :: [[Bool]] -> [Int] -> Bool
+passesForbiddenMachine [] [] = True
+passesForbiddenMachine (first_row : rest)  (x : xs) 
+    | first_row !! x == False = False
+    | otherwise = True && passesForbiddenMachine rest xs
+
 
