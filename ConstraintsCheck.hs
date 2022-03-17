@@ -149,14 +149,15 @@ mainConstraintsCheck name partialAsgn forbiddenMa toonearTasks machinePens toone
             exitSuccess
 
     -- check machine penalty
-    if checkLengthMachinePenalty machinePens && checkLengthRow machinePens
-        then return ()
-    else do outputFileIO "machine penalty error"
-            exitSuccess
     if checkMachinePenaltyContent machinePens
         then return ()
     else do outputFileIO "invalid penalty"
             exitSuccess
+    if checkLengthMachinePenalty machinePens && checkLengthRow machinePens
+        then return ()
+    else do outputFileIO "machine penalty error"
+            exitSuccess
+
 
     -- check too near penalty
     if ifBoolean (map checkFormat3 toonearPens)
